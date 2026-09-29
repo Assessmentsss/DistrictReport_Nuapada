@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuapada FLN Baseline — District Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EAF2FB; --paper-raised:#FFFFFF; --ink:#132A42; --ink-soft:#5C7690; --rule:#CFE1F2;
+  --field:#00316B; --field-dark:#001F42; --harvest:#FFD400; --header-yellow:#8A7300;
+  --phala:#1E8F4E; --phula:#111111; --kadha:#C23B2E; --good:#1E8F4E; --bad:#C23B2E;
+  --shadow:0 1px 2px rgba(19,42,66,.07),0 6px 20px rgba(19,42,66,.08); --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --paper:#0F1B2A; --paper-raised:#16273B; --ink:#E7EFF7; --ink-soft:#93AAC2; --rule:#28405A;
+    --field:#67A2E4; --field-dark:#9DC4F1; --header-yellow:#FFD400;
+    --phala:#4FCB85; --phula:#F0F0F0; --kadha:#F0857A; --good:#4FCB85; --bad:#F0857A;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-weight:700;letter-spacing:-.01em;color:var(--header-yellow);margin:0;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+.topbar{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--rule);}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:10px;}
+.mark{width:32px;height:32px;border-radius:8px;background:var(--field);color:#fff;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;}
+.t1{font-weight:700;font-size:15px;} .t2{font-size:12px;color:var(--ink-soft);}
+.hero{padding:30px 0 18px;}
+.eyebrow{color:var(--header-yellow);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.hero h1{font-size:clamp(24px,3.8vw,34px);font-weight:700;margin-bottom:8px;}
+.hero p{color:var(--ink-soft);font-size:14.5px;max-width:72ch;line-height:1.6;margin:0;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px;}
+.kpi{background:var(--paper-raised);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;}
+.kpi .n{font-size:26px;font-weight:800;color:var(--field-dark);line-height:1.1;}
+.kpi .l{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+.kpi .bar{margin-top:8px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media (max-width:900px){.kpis,.grid-4{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:480px){.kpis,.grid-4{grid-template-columns:1fr;}}
+.insight{background:var(--paper-raised);border:1px solid var(--rule);border-left:4px solid var(--field);border-radius:var(--radius);box-shadow:var(--shadow);padding:13px 15px;}
+.insight.good{border-left-color:var(--phala);} .insight.bad{border-left-color:var(--kadha);}
+.insight .k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px;}
+.insight .v{font-size:16.5px;font-weight:800;line-height:1.25;}
+.insight .d{font-size:12.5px;color:var(--ink-soft);margin-top:5px;line-height:1.45;}
+.section{margin-top:26px;}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.sec-head h2{font-size:20px;}
+.sec-head p{margin:4px 0 0;color:var(--ink-soft);font-size:13.5px;max-width:70ch;line-height:1.5;}
+.panel{background:var(--paper-raised);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;}
+.two{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;}
+@media (max-width:960px){.two{grid-template-columns:1fr;}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend b{color:var(--ink);}
+.sym{display:inline-block;vertical-align:middle;flex:0 0 auto;}
+.group{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin:12px 0 2px;}
+.group:first-child{margin-top:0;}
+.row{display:grid;grid-template-columns:180px 1fr 200px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.row:last-child{border-bottom:none;}
+.row .nm{font-weight:600;} .row .nm span{color:var(--ink-soft);font-weight:500;}
+.vals{display:flex;gap:10px;justify-content:flex-end;font-size:12px;}
+.vals span{display:inline-flex;align-items:center;gap:4px;}
+@media (max-width:640px){.row{grid-template-columns:1fr;gap:5px;}.vals{justify-content:flex-start;}}
+.sbar{display:flex;height:16px;border-radius:5px;overflow:hidden;border:1px solid var(--rule);background:var(--rule);}
+.sbar i{display:block;height:100%;}
+.sbar.thin{height:8px;border-radius:4px;}
+.sbar .p{background:var(--phala);} .sbar .u{background:var(--phula);} .sbar .k{background:var(--kadha);}
+.bcards{display:grid;gap:10px;}
+.bcard{border:1px solid var(--rule);border-radius:9px;padding:11px 13px;cursor:pointer;transition:border-color .15s,background .15s;background:var(--paper-raised);}
+.bcard:hover{border-color:var(--field);}
+.bcard.on{border-color:var(--field);box-shadow:inset 0 0 0 1px var(--field);}
+.bcard-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:7px;}
+.bcard-top b{font-size:14.5px;} .bcard-top small{color:var(--ink-soft);font-size:11.5px;font-weight:500;margin-left:4px;}
+.bcard-top .big{font-size:18px;font-weight:800;color:var(--phala);}
+.bcard-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-top:7px;}
+.bcard-meta b{color:var(--ink);}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden;}
+.seg button{font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 12px;border:none;background:var(--paper-raised);color:var(--ink-soft);cursor:pointer;}
+.seg button+button{border-left:1px solid var(--rule);}
+.seg button.on{background:var(--field);color:var(--paper-raised);}
+.tablewrap{overflow-x:auto;}
+table.heat{border-collapse:collapse;width:100%;min-width:920px;font-size:13px;}
+table.heat th,table.heat td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--rule);}
+table.heat th{font-size:11px;color:var(--ink-soft);font-weight:700;vertical-align:bottom;background:var(--paper);}
+table.heat th small{display:block;font-weight:500;font-size:10px;margin-top:2px;}
+table.heat th.grp{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;}
+table.heat td.bk{text-align:left;white-space:nowrap;padding-left:10px;}
+table.heat td.bk b{color:var(--field-dark);cursor:pointer;border-bottom:1px solid var(--rule);}
+table.heat td.bk small{display:block;color:var(--ink-soft);font-size:11px;margin-top:2px;}
+table.heat tr.total td{background:var(--paper);font-weight:700;border-top:2px solid var(--rule);}
+.cell{border-radius:6px;padding:6px 3px 5px;}
+.cell b{display:block;font-size:13px;}
+.cell .sbar{margin-top:4px;height:5px;border:none;}
+.cell.top{box-shadow:inset 0 0 0 2px var(--field);}
+.note{font-size:12px;color:var(--ink-soft);margin:10px 0 0;line-height:1.55;}
+select{font-family:inherit;font-size:13.5px;padding:8px 10px;border-radius:8px;border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink);}
+.cmp{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.cmp:last-child{border-bottom:none;}
+.cmp.dist{font-weight:700;}
+.cmp .sbar{height:20px;}
+.cmp .sbar i{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap;}
+.cmp .sbar .u{color:var(--paper-raised);}
+.cmp .rk{text-align:right;font-size:12px;color:var(--ink-soft);}
+.prof{display:grid;grid-template-columns:190px 1fr 70px 80px 70px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.prof.hd{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
+.prof:last-child{border-bottom:none;}
+.prof .num{text-align:right;font-weight:700;}
+.barwrap{position:relative;}
+.marker{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--ink);opacity:.8;}
+.up{color:var(--good);} .dn{color:var(--bad);}
+@media (max-width:760px){.prof{grid-template-columns:1fr 60px 70px;}.prof .barwrap{grid-column:1/-1;}.prof .nm{grid-column:1/-1;}.cmp{grid-template-columns:100px 1fr 50px;}}
+.foot{font-size:12px;color:var(--ink-soft);text-align:center;padding:28px 0 40px;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <span class="mark">FLN</span>
+  <div><div class="t1">Nuapada FLN Baseline</div><div class="t2">District Overview Dashboard</div></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Nuapada District · PARAKH Baseline · Grade 2</div>
+    <h1>District overview — block-wise &amp; competency-wise</h1>
+    <p>How children in Nuapada's five blocks performed on 10 foundational literacy and numeracy competencies. Every result is a share of children in one of three bands: Phala (Achieved), Phula (Progressing) or Kadha (Needs Support).</p>
+    <div class="kpis" id="kpis"></div>
+  </div>
+
+  <div class="grid-4" id="insights"></div>
+
+  <div class="section">
+    <div class="sec-head">
+      <div><h2>Competency-wise results</h2><p>District-wide split for each competency, alongside a snapshot of every block. Click a block card to open its profile below.</p></div>
+      <div class="legend">
+        <span><svg class="sym" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="var(--phala)"/></svg><b>Phala</b> Achieved</span>
+        <span><svg class="sym" width="14" height="14" viewBox="0 0 24 24"><rect x="10" y="3" width="4" height="18" fill="var(--phula)"/><rect x="3" y="10" width="18" height="4" fill="var(--phula)"/></svg><b>Phula</b> Progressing</span>
+        <span><svg class="sym" width="14" height="14" viewBox="0 0 24 24"><polygon points="12,3 21,20 3,20" fill="var(--kadha)"/></svg><b>Kadha</b> Needs support</span>
+      </div>
+    </div>
+    <div class="two">
+      <div class="panel"><div id="distBars"></div></div>
+      <div class="panel"><div class="group" style="margin-bottom:8px;">Blocks · average across 10 competencies</div><div class="bcards" id="bcards"></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head">
+      <div><h2>Block × competency</h2><p>Each cell is the share of a block's children in the chosen band. Hover for the full split and approximate counts.</p></div>
+      <div class="seg" id="heatSeg">
+        <button data-m="0" class="on">% Phala</button><button data-m="1">% Phula</button><button data-m="2">% Kadha</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="tablewrap"><table class="heat" id="heat"></table></div>
+      <p class="note" id="heatNote"></p>
+    </div>
+  </div>
+
+  <div class="section two">
+    <div>
+      <div class="sec-head"><div><h2>Compare blocks</h2><p>Pick a competency to rank the five blocks.</p></div>
+        <select id="cmpSel"></select></div>
+      <div class="panel" id="cmp"></div>
+    </div>
+    <div>
+      <div class="sec-head"><div><h2>Block profile</h2><p>Block vs district, competency by competency.</p></div>
+        <select id="profSel"></select></div>
+      <div class="panel" id="prof"></div>
+    </div>
+  </div>
+
+  <div class="foot">Source: Overall scenario.xlsx — Nuapada Baseline analysis (PARAKH competencies). Khadial is the block formerly known as Khariar (Odisha Gazette, 22 Jun 2026).<br>Approximate counts are derived from the published percentages and block totals.</div>
+</div>
+
+<script>
+const KEYS=['Lit1','Lit2','Lit3','Lit4','Lit5','Num1','Num2','Num3','Num4','Num5'];
+const NAMES=['Letter Identification','Word Reading','Sentence Reading','Reading Comprehension','Letter Writing','Number Identification','Counting in Bundles','Number Patterns','Addition','Subtraction'];
+const BLOCKS=[
+ {label:'Boden',n:335,v:[[.2478,.2090,.5433],[.3821,.1761,.4418],[.2090,.1881,.6030],[.1612,.1881,.6507],[.2418,.2896,.4687],[.3284,.2328,.4388],[.2537,.2716,.4746],[.2537,.3075,.4388],[.1582,.2507,.5910],[.1821,.2537,.5642]]},
+ {label:'Khadial',alias:'Khariar',n:480,v:[[.2292,.2188,.5521],[.3563,.1396,.5042],[.1979,.1354,.6667],[.1771,.3000,.5229],[.2479,.2292,.5229],[.3250,.1979,.4771],[.2792,.1875,.5333],[.2563,.1854,.5583],[.1896,.1479,.6625],[.1646,.1396,.6958]]},
+ {label:'Komna',n:321,v:[[.3769,.2368,.3863],[.4174,.1277,.4548],[.2243,.1215,.6542],[.1931,.1807,.6262],[.3271,.1869,.4860],[.4486,.1495,.4019],[.2461,.2461,.5078],[.3427,.1495,.5078],[.3738,.1931,.4330],[.3863,.1340,.4798]]},
+ {label:'Nuapada',n:334,v:[[.2395,.1437,.6168],[.2784,.1527,.5689],[.1437,.1108,.7455],[.1467,.2036,.6497],[.1916,.2635,.5449],[.3713,.1647,.4641],[.2425,.2066,.5509],[.2605,.2545,.4850],[.2126,.1527,.6347],[.2246,.1557,.6198]]},
+ {label:'Sinapali',n:373,v:[[.3003,.2466,.4531],[.4102,.2064,.3834],[.2735,.1555,.5710],[.2279,.2279,.5442],[.3003,.3056,.3941],[.4343,.1877,.3780],[.3056,.1689,.5255],[.3619,.2895,.3485],[.3351,.1769,.4879],[.3056,.2145,.4799]]}
+];
+const TOTAL={label:'District',n:1843,v:[[.2746,.2122,.5133],[.3684,.1601,.4715],[.2100,.1422,.6479],[.1818,.2268,.5914],[.2610,.2545,.4845],[.3776,.1877,.4346],[.2675,.2127,.5198],[.2930,.2349,.4721],[.2496,.1812,.5692],[.2458,.1774,.5768]]};
+const LIT=[0,1,2,3,4], NUM=[5,6,7,8,9], ALL=[0,1,2,3,4,5,6,7,8,9];
+const BAND=['Phala','Phula','Kadha'], BANDCOL=['var(--phala)','var(--phula)','var(--kadha)'];
+
+const pct=x=>(Math.round(x*1000)/10).toFixed(1)+'%';
+const avg=(b,band,ix=ALL)=>ix.reduce((a,i)=>a+b.v[i][band],0)/ix.length;
+const bar=(r,cls='')=>`<div class="sbar ${cls}"><i class="p" style="width:${r[0]*100}%"></i><i class="u" style="width:${r[1]*100}%"></i><i class="k" style="width:${r[2]*100}%"></i></div>`;
+const sym=(c,px=13)=>c===0?`<svg class="sym" width="${px}" height="${px}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="var(--phala)"/></svg>`
+ :c===1?`<svg class="sym" width="${px}" height="${px}" viewBox="0 0 24 24"><rect x="10" y="3" width="4" height="18" fill="var(--phula)"/><rect x="3" y="10" width="18" height="4" fill="var(--phula)"/></svg>`
+ :`<svg class="sym" width="${px}" height="${px}" viewBox="0 0 24 24"><polygon points="12,3 21,20 3,20" fill="var(--kadha)"/></svg>`;
+const avgRow=b=>[avg(b,0),avg(b,1),avg(b,2)];
+
+/* KPIs */
+document.getElementById('kpis').innerHTML=`
+ <div class="kpi"><div class="n">${TOTAL.n.toLocaleString('en-IN')}</div><div class="l">Children assessed across 5 blocks</div></div>
+ <div class="kpi"><div class="n" style="color:var(--phala)">${pct(avg(TOTAL,0))}</div><div class="l">Average at Phala (all 10 competencies)</div><div class="bar">${bar(avgRow(TOTAL),'thin')}</div></div>
+ <div class="kpi"><div class="n">${pct(avg(TOTAL,0,LIT))} <span style="font-size:14px;color:var(--ink-soft)">vs</span> ${pct(avg(TOTAL,0,NUM))}</div><div class="l">Phala · Literacy vs Numeracy</div></div>
+ <div class="kpi"><div class="n" style="color:var(--kadha)">${pct(avg(TOTAL,2))}</div><div class="l">Average at Kadha — need targeted support</div></div>`;
+
+/* Insights */
+(function(){
+ let best=0,worst=0; TOTAL.v.forEach((r,i)=>{if(r[0]>TOTAL.v[best][0])best=i;if(r[2]>TOTAL.v[worst][2])worst=i;});
+ const lead=[...BLOCKS].sort((a,b)=>avg(b,0)-avg(a,0))[0], lag=[...BLOCKS].sort((a,b)=>avg(b,2)-avg(a,2))[0];
+ let spread={i:0,d:0}; ALL.forEach(i=>{const vs=BLOCKS.map(b=>b.v[i][0]);const d=Math.max(...vs)-Math.min(...vs);if(d>spread.d)spread={i,d};});
+ const hi=BLOCKS.reduce((a,b)=>b.v[spread.i][0]>a.v[spread.i][0]?b:a), lo=BLOCKS.reduce((a,b)=>b.v[spread.i][0]<a.v[spread.i][0]?b:a);
+ document.getElementById('insights').innerHTML=`
+  <div class="insight good"><div class="k">Strongest competency</div><div class="v">${KEYS[best]} · ${NAMES[best]}</div><div class="d">${pct(TOTAL.v[best][0])} of children at Phala district-wide.</div></div>
+  <div class="insight bad"><div class="k">Needs most support</div><div class="v">${KEYS[worst]} · ${NAMES[worst]}</div><div class="d">${pct(TOTAL.v[worst][2])} of children at Kadha — the largest gap in the district.</div></div>
+  <div class="insight good"><div class="k">Leading block</div><div class="v">${lead.label}</div><div class="d">Highest average Phala (${pct(avg(lead,0))}). ${lag.label} carries the largest Kadha share (${pct(avg(lag,2))}).</div></div>
+  <div class="insight"><div class="k">Widest block gap</div><div class="v">${KEYS[spread.i]} · ${NAMES[spread.i]}</div><div class="d">${hi.label} ${pct(hi.v[spread.i][0])} vs ${lo.label} ${pct(lo.v[spread.i][0])} at Phala — a ${(spread.d*100).toFixed(1)} pp spread.</div></div>`;
+})();
+
+/* District bars */
+(function(){
+ const row=i=>{const r=TOTAL.v[i];return `<div class="row"><div class="nm">${KEYS[i]} <span>· ${NAMES[i]}</span></div>${bar(r)}<div class="vals"><span>${sym(0)}<b>${pct(r[0])}</b></span><span>${sym(1)}<b>${pct(r[1])}</b></span><span>${sym(2)}<b>${pct(r[2])}</b></span></div></div>`;};
+ document.getElementById('distBars').innerHTML='<div class="group">Literacy</div>'+LIT.map(row).join('')+'<div class="group">Numeracy</div>'+NUM.map(row).join('');
+})();
+
+/* Block cards */
+let profBlock='Komna';
+function renderCards(){
+ document.getElementById('bcards').innerHTML=BLOCKS.map(b=>{
+  let s=0,w=0; b.v.forEach((r,i)=>{if(r[0]>b.v[s][0])s=i;if(r[2]>b.v[w][2])w=i;});
+  return `<div class="bcard ${b.label===profBlock?'on':''}" data-b="${b.label}">
+   <div class="bcard-top"><div><b>${b.label}</b><small>${b.alias?'f.k.a. '+b.alias+' · ':''}${b.n} children</small></div><div class="big">${pct(avg(b,0))}</div></div>
+   ${bar(avgRow(b),'thin')}
+   <div class="bcard-meta"><span>Literacy <b>${pct(avg(b,0,LIT))}</b></span><span>Numeracy <b>${pct(avg(b,0,NUM))}</b></span><span>Kadha <b style="color:var(--kadha)">${pct(avg(b,2))}</b></span></div>
+   <div class="bcard-meta"><span>Best: <b>${NAMES[s]}</b></span><span>Weakest: <b>${NAMES[w]}</b></span></div></div>`;}).join('');
+ document.querySelectorAll('.bcard').forEach(c=>c.onclick=()=>{setProf(c.dataset.b);document.getElementById('prof').scrollIntoView({behavior:'smooth',block:'center'});});
+}
+
+/* Heatmap */
+let heatMode=0;
+function renderHeat(){
+ const m=heatMode, col=BANDCOL[m];
+ const top=ALL.map(i=>Math.max(...BLOCKS.map(b=>b.v[i][m])));
+ const cell=(b,i,tot)=>{const r=b.v[i],x=r[m];
+  const tip=`${b.label} · ${KEYS[i]} ${NAMES[i]}\nPhala ${pct(r[0])} (≈${Math.round(r[0]*b.n)})\nPhula ${pct(r[1])} (≈${Math.round(r[1]*b.n)})\nKadha ${pct(r[2])} (≈${Math.round(r[2]*b.n)})`;
+  return `<td><div class="cell${!tot&&x===top[i]?' top':''}" title="${tip}" style="background:color-mix(in srgb, ${col} ${Math.round(x*(m===1?45:60))}%, transparent)"><b>${pct(x)}</b>${bar(r)}</div></td>`;};
+ const head=`<thead><tr><th></th><th class="grp" colspan="5">Literacy</th><th class="grp" colspan="5">Numeracy</th><th class="grp">Avg</th></tr>
+  <tr><th style="text-align:left;padding-left:10px">Block</th>${ALL.map(i=>`<th>${KEYS[i]}<small>${NAMES[i]}</small></th>`).join('')}<th>All 10</th></tr></thead>`;
+ const avgCell=b=>`<td><div class="cell" style="background:color-mix(in srgb, ${col} ${Math.round(avg(b,m)*(m===1?45:60))}%, transparent)"><b>${pct(avg(b,m))}</b>${bar(avgRow(b))}</div></td>`;
+ const rows=BLOCKS.map(b=>`<tr><td class="bk"><b data-b="${b.label}">${b.label}</b><small>${b.alias?'f.k.a. '+b.alias+' · ':''}${b.n} children</small></td>${ALL.map(i=>cell(b,i)).join('')}${avgCell(b)}</tr>`).join('');
+ const tot=`<tr class="total"><td class="bk">District<small>${TOTAL.n.toLocaleString('en-IN')} children</small></td>${ALL.map(i=>cell(TOTAL,i,true)).join('')}${avgCell(TOTAL)}</tr>`;
+ document.getElementById('heat').innerHTML=head+'<tbody>'+rows+tot+'</tbody>';
+ document.querySelectorAll('#heat td.bk b[data-b]').forEach(el=>el.onclick=()=>{setProf(el.dataset.b);document.getElementById('prof').scrollIntoView({behavior:'smooth',block:'center'});});
+ document.getElementById('heatNote').textContent=[
+  'Showing % of children at Phala (Achieved). Darker green = more children achieved it. Outlined cell = best block for that competency.',
+  'Showing % of children at Phula (Progressing) — children close to achieving. Outlined cell = block with the most children progressing.',
+  'Showing % of children at Kadha (Needs Support). Darker red = greater need. Outlined cell = block with the highest need for that competency.'][m]+' Click a block name for its profile.';
+}
+document.querySelectorAll('#heatSeg button').forEach(b=>b.onclick=()=>{heatMode=+b.dataset.m;document.querySelectorAll('#heatSeg button').forEach(x=>x.classList.toggle('on',x===b));renderHeat();});
+
+/* Compare blocks */
+const cmpSel=document.getElementById('cmpSel');
+cmpSel.innerHTML='<option value="avg">All 10 competencies (average)</option>'+ALL.map(i=>`<option value="${i}">${KEYS[i]} · ${NAMES[i]}</option>`).join('');
+cmpSel.value='2';
+function renderCmp(){
+ const v=cmpSel.value, get=b=>v==='avg'?avgRow(b):b.v[+v];
+ const lab=x=>x>=.09?pct(x):'';
+ const line=(b,rank,dist)=>{const r=get(b);return `<div class="cmp${dist?' dist':''}"><div>${b.label}${b.alias?' <span style="color:var(--ink-soft);font-size:11px">(Khariar)</span>':''}</div>
+  <div class="sbar"><i class="p" style="width:${r[0]*100}%">${lab(r[0])}</i><i class="u" style="width:${r[1]*100}%">${lab(r[1])}</i><i class="k" style="width:${r[2]*100}%">${lab(r[2])}</i></div>
+  <div class="rk">${dist?'':'#'+rank}</div></div>`;};
+ const sorted=[...BLOCKS].sort((a,b)=>get(b)[0]-get(a)[0]);
+ document.getElementById('cmp').innerHTML=sorted.map((b,i)=>line(b,i+1)).join('')+line(TOTAL,0,true)+
+  '<p class="note">Blocks ranked by share of children at Phala. Segments: Phala · Phula · Kadha.</p>';
+}
+cmpSel.onchange=renderCmp;
+
+/* Block profile */
+const profSel=document.getElementById('profSel');
+profSel.innerHTML=BLOCKS.map(b=>`<option value="${b.label}">${b.label}${b.alias?' (f.k.a. '+b.alias+')':''}</option>`).join('');
+function setProf(l){profBlock=l;profSel.value=l;renderProf();renderCards();}
+profSel.onchange=()=>setProf(profSel.value);
+function renderProf(){
+ const b=BLOCKS.find(x=>x.label===profBlock);
+ const rowFn=i=>{const r=b.v[i],d=TOTAL.v[i][0],dl=(r[0]-d)*100;
+  return `<div class="prof"><div class="nm"><b>${KEYS[i]}</b> <span style="color:var(--ink-soft)">· ${NAMES[i]}</span></div>
+   <div class="barwrap">${bar(r)}<div class="marker" style="left:${d*100}%" title="District Phala ${pct(d)}"></div></div>
+   <div class="num" style="color:var(--phala)">${pct(r[0])}</div>
+   <div class="num ${dl>=0?'up':'dn'}">${dl>=0?'+':'−'}${Math.abs(dl).toFixed(1)} pp</div>
+   <div class="num" style="color:var(--kadha)">${pct(r[2])}</div></div>`;};
+ document.getElementById('prof').innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+   <b style="font-size:15px">${b.label}${b.alias?' <span style="color:var(--ink-soft);font-weight:500;font-size:12px">f.k.a. '+b.alias+'</span>':''}</b>
+   <span style="font-size:12px;color:var(--ink-soft)">${b.n} children · avg Phala ${pct(avg(b,0))} (district ${pct(avg(TOTAL,0))})</span></div>
+  <div class="prof hd"><div class="nm">Competency</div><div class="barwrap">Split (dashed = district Phala)</div><div class="num">Phala</div><div class="num">vs district</div><div class="num">Kadha</div></div>
+  <div class="group">Literacy</div>${LIT.map(rowFn).join('')}
+  <div class="group">Numeracy</div>${NUM.map(rowFn).join('')}`;
+}
+
+renderCards(); renderHeat(); renderCmp(); setProf('Komna');
+</script>
+</body>
+</html>
